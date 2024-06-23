@@ -25,7 +25,9 @@ def get_raydium_transition():
                     ).json()
                     token_info = token_info["data"]
                     total_supply = pair["fdv"] / float(pair["priceUsd"])
-                    mcap = (total_supply) * (get_ohlc(mint, int((pair['pairCreatedAt'] / 1000) - 60), int((pair['pairCreatedAt'] / 1000) + 60)))
+                    open_price, high_price = get_ohlc(mint, int((pair['pairCreatedAt'] / 1000) - 60), int((pair['pairCreatedAt'] / 1000) + 60), "1m")
+                    mcap = (total_supply) * (open_price)
+                    high_mcap = (total_supply) * (high_price)
                     TOKENS.insert_one(
                         {
                             "mcap15min/launch": None,
@@ -33,7 +35,7 @@ def get_raydium_transition():
                             "launchDate": datetime.fromtimestamp(
                                 pair["pairCreatedAt"] / 1000
                             ),
-                            "allTimeHighMcap": mcap,
+                            "allTimeHighMcap": high_mcap,
                             "mcapEveryH": mcap,
                             "mcapATH/mcap15min": None, 
                             "Name": token_info["name"],

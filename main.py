@@ -2,9 +2,10 @@ import helpers.new_tokens
 import time
 import helpers.get_raydium
 import helpers.fifteen_minutes_info
+import helpers.one_hour_update
 from helpers.database import TOKENS
 from google_sheets import write_to_google_sheets
-import json
+
 
 def main():
   while True:
@@ -24,18 +25,17 @@ def main():
           token['allTimeHighMcap'],
           token['mcapATH/mcap15min'],
           token['Name'],
-          token['contractAddress'],
+          f"https://dexscreener.com/solana/{token['contractAddress']}",
           token['launchMcap'],
           token['mcap15min'],
-          token['mcap15min/launch'],
           token['liquidity15min'],
           token['liquidity15min/mcap15min'],
           token['holders'],
           token['5minVolume15min'],
-          token['image'],
-          token['twitter'],
-          token['telegram'],
-          token['website'],
+          "1" if token['image'] else "0",
+          "1" if token['twitter'] else "0",
+          "1" if token['telegram'] else "0",
+          "1" if token['website'] else "0",
           token['twitterFollowers'],
           token['telegramMembers'],
           token['telegramLiveCall'],
@@ -45,7 +45,7 @@ def main():
           token['lunarCrushSocialDominance'],
           token['lunarCrushSocialScore'],
           token['highestPercetageOfHolder'],
-          token['percentOfTop5Holders'],
+          token['percentOfTop5Holders'].replace(" ", "") if token['percentOfTop5Holders'] else None,
         ]
       )
     write_to_google_sheets(DATA_TO_INSERT)

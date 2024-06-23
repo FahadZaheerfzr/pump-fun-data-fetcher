@@ -77,9 +77,8 @@ def get_solana_top_token_holders(token_address, supply):
 
 
 
-def get_ohlc(pair_address, start_time, end_time):
-    
-    url = f"https://public-api.birdeye.so/defi/ohlcv?address={pair_address}&type=1m&time_from={start_time}&time_to={end_time}"
+def get_ohlc(pair_address, start_time, end_time, interval):
+    url = f"https://public-api.birdeye.so/defi/ohlcv?address={pair_address}&type={interval}&time_from={start_time}&time_to={end_time}"
     headers = {
         "accept": "application/json",
         "x-chain": "solana",
@@ -94,4 +93,5 @@ def get_ohlc(pair_address, start_time, end_time):
     data = response.json()
     print(data)
     open_price = data["data"]["items"][0]["o"]
-    return open_price
+    high_price = data["data"]["items"][0]["h"]
+    return open_price, high_price
