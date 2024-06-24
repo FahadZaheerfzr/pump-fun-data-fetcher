@@ -4,10 +4,15 @@ import websockets
 import json
 from helpers.database import INITIAL_STATE
 from datetime import datetime
+import ssl
+import certifi
+
+ssl_context = ssl.create_default_context()
+ssl_context.load_verify_locations(certifi.where())
 
 async def subscribe():
   uri = "wss://pumpportal.fun/api/data"
-  async with websockets.connect(uri) as websocket:
+  async with websockets.connect(uri, ssl=ssl_context) as websocket:
       
       # Subscribing to token creation events
       payload = {

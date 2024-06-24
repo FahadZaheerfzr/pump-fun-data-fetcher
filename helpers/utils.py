@@ -1,6 +1,6 @@
 import requests
 import json
-
+import certifi
 
 
 def get_holder_account_owner(holder_account):
@@ -18,7 +18,7 @@ def get_holder_account_owner(holder_account):
   }
 
 
-  response = requests.post(url, headers=headers, data=json.dumps(data))
+  response = requests.post(url, headers=headers, data=json.dumps(data), verify=certifi.where())
 
   data = response.json()
   return data['result']['value']['data']['parsed']['info']['owner']
@@ -36,7 +36,7 @@ def get_token_holder_count(token_address):
         "method": "getTokenAccounts",
         "params": params,
     }
-    response = requests.post(url, headers=headers, data=json.dumps(body))
+    response = requests.post(url, headers=headers, data=json.dumps(body),  verify=certifi.where())
     data = response.json()
     total_holders = data['result']["total"]
     return total_holders
@@ -53,7 +53,7 @@ def get_solana_top_token_holders(token_address, supply):
         "params": [token_address],
     }
 
-    response = requests.post(url, headers=headers, data=json.dumps(data))
+    response = requests.post(url, headers=headers, data=json.dumps(data),  verify=certifi.where())
 
     data = response.json()
     
@@ -85,7 +85,7 @@ def get_ohlc(pair_address, start_time, end_time, interval):
         "X-API-KEY": "061eef71caa947a3b82c8dbda8bbdf63",
     }
 
-    response = requests.get(url, headers=headers)
+    response = requests.get(url, headers=headers,  verify=certifi.where())
 
     if response.status_code != 200:
         raise Exception(f"Error fetching data: {response.status_code}, {response.text}")

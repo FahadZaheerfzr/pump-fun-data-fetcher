@@ -4,6 +4,9 @@ import threading
 import time
 from datetime import datetime
 from helpers.utils import get_ohlc
+import ssl
+import certifi
+
 
 def get_raydium_transition():
     initial_contracts = INITIAL_STATE.find({"state": "initial"})
@@ -12,7 +15,8 @@ def get_raydium_transition():
     for contract in initial_contracts:
         mint = contract["mint"]
         response = requests.get(
-            f" https://api.dexscreener.com/latest/dex/tokens/{mint}"
+            f" https://api.dexscreener.com/latest/dex/tokens/{mint}",
+             verify=certifi.where()
         )
         data = response.json()
 
@@ -21,7 +25,8 @@ def get_raydium_transition():
             for pair in data["pairs"]:
                 if pair["dexId"] == "raydium":
                     token_info = requests.get(
-                        f"https://pumpportal.fun/api/data/token-info?ca={mint}"
+                        f"https://pumpportal.fun/api/data/token-info?ca={mint}",
+                         verify=certifi.where()
                     ).json()
                     token_info = token_info["data"]
                     total_supply = pair["fdv"] / float(pair["priceUsd"])

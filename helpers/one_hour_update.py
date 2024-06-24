@@ -4,6 +4,9 @@ import requests
 import time
 import threading
 from helpers.utils import get_ohlc
+import certifi
+
+
 
 def one_hour_update():
   tokens = TOKENS.find({"state": "fifteen_minutes"})
@@ -17,7 +20,7 @@ def one_hour_update():
     time_difference = current_time - token_update_date
     print(time_difference.total_seconds())
     if time_difference.total_seconds() >= 3600:
-        response = requests.get(f"https://api.dexscreener.com/latest/dex/tokens/{token['contractAddress']}")
+        response = requests.get(f"https://api.dexscreener.com/latest/dex/tokens/{token['contractAddress']}", verify=certifi.where())
         data = response.json()
         
         last_updated = datetime.strptime(token['updatedAt'], "%Y-%m-%d %H:%M:%S")

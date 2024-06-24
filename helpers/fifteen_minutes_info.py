@@ -4,6 +4,8 @@ import requests
 from helpers.utils import get_solana_top_token_holders, get_token_holder_count
 import time
 import threading
+import certifi
+
 
 
 def get_fifteen_minutes_info():
@@ -17,7 +19,7 @@ def get_fifteen_minutes_info():
         time_difference = current_time - token_launch_date
 
         if time_difference.total_seconds() >= 900:
-            response = requests.get(f"https://api.dexscreener.com/latest/dex/tokens/{token['contractAddress']}")
+            response = requests.get(f"https://api.dexscreener.com/latest/dex/tokens/{token['contractAddress']}", verify=certifi.where())
             data = response.json()
 
             more_info = data["pairs"][0]
